@@ -5,8 +5,66 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EventManagement"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="566.749" Width="1382.266">
     <Grid>
-        
+        <Grid.Resources>
+            <Style TargetType="Label">
+                <Setter Property="Margin" Value="10,10,10,10"/>
+            </Style>
+            <Style TargetType="ComboBox">
+                <Setter Property="Margin" Value="30,10,10,10"/>
+            </Style>
+            <Style x:Key="textBoxMargin" TargetType="TextBox">
+                <Setter Property="Margin" Value="30,10,0,0"/>
+            </Style>
+            <Style x:Key="buttonMargin" TargetType="Button">
+                <Setter Property="Margin" Value="0,10,0,0"/>
+                <Setter Property="Width" Value="200"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto" MinWidth="259"/>
+            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="0"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="331"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Content="Choose the day" Grid.Column="0" HorizontalAlignment="Left"  Grid.Row="0" VerticalAlignment="Top" Height="26" Margin="10,10,0,0" Width="92"/>
+        <ComboBox x:Name="daySelection" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="0" VerticalAlignment="Top" Width="120" Height="22" Margin="31,10,0,0"/>
+
+        <Label Content="Choose type of Event" Grid.Column="0" HorizontalAlignment="Left"  Grid.Row="1" VerticalAlignment="Top" Height="26" Margin="10,11,0,0" Width="122" Grid.RowSpan="2"/>
+        <ComboBox x:Name="eventSelection" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="120" Height="22" Margin="31,11,0,0" SelectionChanged="EventSelection_SelectionChanged"/>
+
+        <Label Content="Enter number of people attending" Grid.Column="0" HorizontalAlignment="Left"  Grid.Row="2" VerticalAlignment="Top" Height="26" Margin="10,12,0,0" Width="190" Grid.RowSpan="2"/>
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="120" Style="{StaticResource textBoxMargin}" Height="18" Margin="31,12,0,0" />
+
+        <Label Content="Decorations Required?" Grid.Column="0" HorizontalAlignment="Left"  Grid.Row="3" VerticalAlignment="Top" Height="26" Margin="10,12,0,0" Width="190" Grid.RowSpan="2"/>
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top" Width="120" Style="{StaticResource textBoxMargin}" Height="18" Margin="31,12,0,0" />
+
+        <Label x:Name="flowerLabel" Content="Flowers Required?" Grid.Column="0" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top" Height="26" Margin="10,12,0,0" Width="190" Grid.RowSpan="2"/>
+        <TextBox x:Name="flowerBox" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" Width="120" Style="{StaticResource textBoxMargin}" Height="18" Margin="31,12,0,0" />
+
+        <Label x:Name="DJLabel" Content="DJ(Disk Jockey) Required?" Grid.Column="0" HorizontalAlignment="Left"  Grid.Row="5" VerticalAlignment="Top" Height="26" Margin="10,12,0,0" Width="190" Grid.RowSpan="2"/>
+        <TextBox x:Name="DJBox" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Top" Width="120" Style="{StaticResource textBoxMargin}" Height="18" Margin="31,12,0,0" />
+
+        <Label x:Name="CakeLabel" Content="Cake Required?" Grid.Column="0" HorizontalAlignment="Left"  Grid.Row="6" VerticalAlignment="Top" Height="26" Margin="10,12,0,0" Width="190"/>
+        <TextBox x:Name="CakeBox" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Top" Width="120" Style="{StaticResource textBoxMargin}" Height="18" Margin="31,12,0,0" />
+
+        <DataGrid Grid.Column="3" Grid.Row="1" Grid.RowSpan="6" Grid.ColumnSpan="2" x:Name="eventGrid" ItemsSource="{Binding Path=EventList}" Margin="0,1,0,27"/>
+        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" Height="152"  Grid.ColumnSpan="2">
+            <Button Content="Register"  Width="75" Style="{StaticResource buttonMargin}"/>
+            <Button Content="Display"   Width="75"  Style="{StaticResource buttonMargin}" />
+        </StackPanel>
+
     </Grid>
 </Window>
