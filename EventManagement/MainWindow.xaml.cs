@@ -254,5 +254,47 @@ namespace EventManagement
             }
             eventGrid.ItemsSource = EventList;
         }
+
+        private void LessThan200_Click(object sender, RoutedEventArgs e)
+        {
+            EventPlan plan = ReadFromXML();
+            var query = from currEvent in plan
+                        where currEvent.NumOfPeople < 200
+                        select currEvent;
+            EventPlan lt200 = new EventPlan();
+            foreach(Event ev in query)
+            {
+                lt200.Add(ev);
+            }
+            eventGrid.ItemsSource = lt200;
+        }
+
+        private void MoreOrEq200_Click(object sender, RoutedEventArgs e)
+        {
+            EventPlan plan = ReadFromXML();
+            var query = from currEvent in plan
+                        where currEvent.NumOfPeople >= 200
+                        select currEvent;
+            EventPlan mt200 = new EventPlan();
+            foreach (Event ev in query)
+            {
+                mt200.Add(ev);
+            }
+            eventGrid.ItemsSource = mt200;
+        }
+
+        private void TypeSearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            EventPlan plan = ReadFromXML();
+            var query = from currEvent in plan
+                        where currEvent.EventType.ToLower() == typeSearchBox.Text.ToLower()
+                        select currEvent;
+            EventPlan typeEv = new EventPlan();
+            foreach (Event ev in query)
+            {
+                typeEv.Add(ev);
+            }
+            eventGrid.ItemsSource = typeEv;
+        }
     }
 }

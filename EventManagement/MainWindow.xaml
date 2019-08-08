@@ -74,9 +74,14 @@
                 <DataGridTextColumn Header="Credit Card" Binding="{Binding CreditCard}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="7" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center" Height="152"  Grid.ColumnSpan="1">
+        <StackPanel Grid.Row="7" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center" Height="202"  Grid.ColumnSpan="1" Margin="0,89,0,40">
             <Button x:Name="registerButton" Content="Register"  Width="75" Style="{StaticResource buttonMargin}" Click="RegisterButton_Click"/>
             <Button x:Name="displayButton" Content="Display"   Width="75"  Style="{StaticResource buttonMargin}" Click="DisplayButton_Click" />
+            <Button x:Name="lessThan200" Content="Less than 200 people"   Width="185"  Style="{StaticResource buttonMargin}" Click="LessThan200_Click" />
+            <Button x:Name="moreOrEq200" Content="More or equal to 200 people"   Width="185"  Style="{StaticResource buttonMargin}" Click="MoreOrEq200_Click" />
+            <TextBox x:Name="typeSearchBox" Width="105" Margin="0,10,0,0"></TextBox>
+            <Button x:Name="typeSearchButton" Width="105" Content="Search By Type" Style="{StaticResource buttonMargin}" Click="TypeSearchButton_Click" ></Button>
+
         </StackPanel>
 
     </Grid>
