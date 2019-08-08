@@ -1,6 +1,8 @@
-﻿namespace EventManagement
+﻿using System;
+
+namespace EventManagement
 {
-    public abstract class Event
+    public abstract class Event : IComparable<Event>
     {
         private string eventDay;
         private string eventType;
@@ -15,6 +17,16 @@
         public bool DecorReq { get => decorReq; set => decorReq = value; }
         public string CreditCard { get => creditCard; set => creditCard = value; }
         public string AdditionalFeature { get => additionalFeature; set => additionalFeature = value; }
+
+        public int CompareTo(Event other)
+        {
+            if(other != null)
+            {
+                return this.EventDay.CompareTo(other.EventDay);
+            }
+
+            return 0;
+        }
 
     }
 }

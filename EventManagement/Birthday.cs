@@ -3,7 +3,10 @@
     public class Birthday : Event
     {
         private bool cakeReq;
-
+        public Birthday()
+        {
+           
+        }
 
         public Birthday(string eventDay, string eventType, int numOfPeople, bool decorReq, string creditCard, string addFea)
         {

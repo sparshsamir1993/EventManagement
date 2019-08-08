@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 
 namespace EventManagement
 {
@@ -177,7 +179,7 @@ namespace EventManagement
                     currentEvent = new Birthday(eventDay, eventType, numOfPeople, decorReq, creditCard, addFea);
                     break;
 
-                case "gradutaion":
+                case "graduation":
                     bool djReq = DJBox.Text == "y" ? true : false;
                     addFea = DJBox.Text == "y" ? "DJ Required" : "DJ Not Required";
                     currentEvent = new Graduation(eventDay, eventType, numOfPeople, decorReq, creditCard, addFea);
@@ -195,6 +197,7 @@ namespace EventManagement
             eventPlan.Add(currentEvent);
             int slot = returnKey(daySelection.SelectedValue.ToString());
             datetable.Remove(slot);
+            SaveEventListInXML();
             ResetForm();
         }
 
@@ -212,6 +215,44 @@ namespace EventManagement
             decorReqBox.Text = "";
             eventSelection.Text = "";
             daySelection.Text = "";
+        }
+        public static EventPlan ReadFromXML()
+        {
+            EventPlan listFromXML = new EventPlan();
+            if (File.Exists("eventPlan.xml"))
+            {
+
+                XmlSerializer serializer = new XmlSerializer(typeof(EventPlan));
+                TextReader tr = new StreamReader("eventPlan.xml");
+                listFromXML = (EventPlan)serializer.Deserialize(tr);
+                tr.Close();
+
+            }
+            else
+            {
+
+            }
+            return listFromXML;
+        }
+        public  void SaveEventListInXML()
+        {
+            eventPlan.Sort();
+            XmlSerializer serializer = new XmlSerializer(typeof(EventPlan));
+            TextWriter tw = new StreamWriter("eventPlan.xml");
+            serializer.Serialize(tw, eventPlan);
+            tw.Close();
+        }
+
+        private void DisplayButton_Click(object sender, RoutedEventArgs e)
+        {
+            eventPlan.Clear();
+            EventList.Clear();
+            eventPlan = ReadFromXML();
+            foreach(Event ev in eventPlan)
+            {
+                EventList.Add(ev);
+            }
+            eventGrid.ItemsSource = EventList;
         }
     }
 }

@@ -4,6 +4,10 @@
     {
         private bool flowersReq;
         public bool FlowersReq { get => flowersReq; set => flowersReq = value; }
+        public Wedding()
+        {
+
+        }
         public Wedding(string eventDay, string eventType, int numOfPeople, bool decorReq, string creditCard, string  addFea)
         {
             EventDay = eventDay;
