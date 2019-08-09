@@ -6,6 +6,14 @@
         xmlns:local="clr-namespace:EventManagement"
         mc:Ignorable="d"
         Title="MainWindow" Height="566.749" Width="1382.266">
+    <Window.Resources>
+        <local:PeopleUnder100 x:Key="PeopleUnder100"/>
+        <Style x:Key="under100" TargetType="TextBlock">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self},
+                                    Path =Text, 
+                                    Converter={StaticResource PeopleUnder100}}"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.Resources>
             <Style TargetType="Label">
@@ -116,7 +124,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="EventDay" Binding="{Binding EventDay}"/>
                 <DataGridTextColumn Header="Event Type" Binding="{Binding EventType}"/>
-                <DataGridTextColumn Header="Number Of people" Binding="{Binding NumOfPeople}"/>
+                <DataGridTextColumn Header="Number Of people" Binding="{Binding NumOfPeople}" ElementStyle="{StaticResource under100}"/>
                 <DataGridTextColumn Header="Decoration Required?" Binding="{Binding DecorReq}"/>
                 <DataGridTextColumn Header="Additional Feature" Binding="{Binding AdditionalFeature}"/>
                 <DataGridTextColumn Header="Credit Card" Binding="{Binding HiddenCC}"/>
