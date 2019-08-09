@@ -61,10 +61,10 @@ namespace EventManagement
             EventList = new ObservableCollection<Event>();
             HideAdditionalFeatures();
             DataContext = this;
-            //if (File.Exists("eventPlan.xml"))
-            //{
-            //    File.Delete("eventPlan.xml");
-            //}
+            if (File.Exists("eventPlan.xml"))
+            {
+                File.Delete("eventPlan.xml");
+            }
         }
 
         public void PopulateDays()
