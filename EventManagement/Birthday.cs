@@ -20,7 +20,9 @@
 
         public bool CakeReq { get => cakeReq; set => cakeReq = value; }
 
-
-
+        public override int GetTotal()
+        {
+            return 50 + (10 * NumOfPeople);
+        }
     }
 }

@@ -17,6 +17,10 @@
             CreditCard = creditCard;
             AdditionalFeature = addFea;
         }
-        
+
+        public override int GetTotal()
+        {
+            return 500 + (10 * NumOfPeople);
+        }
     }
 }

@@ -18,9 +18,12 @@ namespace EventManagement
         public string CreditCard { get => creditCard; set => creditCard = value; }
         public string AdditionalFeature { get => additionalFeature; set => additionalFeature = value; }
 
+        public int ShowTotal { get => GetTotal(); }
+        public string HiddenCC { get => showHiddenCC(); }
+
         public int CompareTo(Event other)
         {
-            if(other != null)
+            if (other != null)
             {
                 return this.EventDay.CompareTo(other.EventDay);
             }
@@ -28,9 +31,29 @@ namespace EventManagement
             return 0;
         }
 
+        public abstract int GetTotal();
         public void Dispose()
         {
             GC.SuppressFinalize(this);
+        }
+        public string showHiddenCC()
+        {
+            string[] ccArr = CreditCard.Split(' ');
+
+            char[] ccWithoutSpaces = string.Join("", ccArr).ToCharArray();
+            char[] hidCCArr = new char[ccWithoutSpaces.Length];
+            for (int i = 0; i < ccWithoutSpaces.Length; i++)
+            {
+                if (i >= 4 && i <= 11)
+                {
+                    hidCCArr[i] = 'X';
+                }
+                else
+                {
+                    hidCCArr[i] = ccWithoutSpaces[i];
+                }
+            }
+            return new string(hidCCArr);
         }
     }
 }

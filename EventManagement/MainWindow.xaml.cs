@@ -61,6 +61,10 @@ namespace EventManagement
             EventList = new ObservableCollection<Event>();
             HideAdditionalFeatures();
             DataContext = this;
+            if (File.Exists("eventPlan.xml"))
+            {
+                File.Delete("eventPlan.xml");
+            }
         }
 
         public void PopulateDays()
@@ -79,10 +83,10 @@ namespace EventManagement
                 eventSelection.Items.Add(val);
             }
         }
-        private int returnKey(String value)
+        private int returnKey(String value, Hashtable htable)
         {
             int key = -1;
-            foreach (DictionaryEntry p in datetable)
+            foreach (DictionaryEntry p in htable)
             {
                 int intKey = 0;
                 if (p.Value.ToString() == value && int.TryParse(p.Key.ToString(), out intKey))
@@ -159,49 +163,114 @@ namespace EventManagement
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
+            ResetForeground();
             Event currentEvent = null;
             string eventDay = string.Empty;
             string eventType = string.Empty;
             int numOfPeople ;
             bool decorReq;
             string creditCard = string.Empty;
-
-            eventDay = daySelection.SelectedValue.ToString();
-            eventType = eventSelection.SelectedValue.ToString();
-            numOfPeople = int.Parse(numOfPeopleBox.Text);
-            decorReq = decorReqBox.Text == "y" ? true : false;
-            
-            creditCard = CCBox.Text;
-
-            switch (eventType.ToLower())
+            string error = string.Empty;
+            if(daySelection.SelectedValue == null || daySelection.SelectedValue.ToString() == "")
             {
-
-                case "birthday":
-                   
-                    string addFea = CakeBox.Text == "y" ? "Cake Required" : "Cake Not Required";
-                    currentEvent = new Birthday(eventDay, eventType, numOfPeople, decorReq, creditCard, addFea);
-                    break;
-
-                case "graduation":
-                    bool djReq = DJBox.Text == "y" ? true : false;
-                    addFea = DJBox.Text == "y" ? "DJ Required" : "DJ Not Required";
-                    currentEvent = new Graduation(eventDay, eventType, numOfPeople, decorReq, creditCard, addFea);
-                    break;
-
-                case "wedding":
-                    bool flowersReq = flowerBox.Text == "y" ? true : false;
-                    addFea = flowerBox.Text == "y" ? "Flowers Required" : "Flowers Not Required";
-                    currentEvent = new Wedding(eventDay, eventType, numOfPeople, decorReq, creditCard, addFea);
-                    
-                    break;
-
+                daySelection.Foreground = Brushes.Red;
+                daySelection.ToolTip = "Can't be empty";
+                return;
             }
-            EventList.Add(currentEvent);
-            eventPlan.Add(currentEvent);
-            int slot = returnKey(daySelection.SelectedValue.ToString());
-            datetable.Remove(slot);
-            SaveEventListInXML();
-            ResetForm();
+            else if(eventSelection.SelectedValue == null || eventSelection.SelectedValue.ToString() == "")
+            {
+                eventSelection.Foreground = Brushes.Red;
+                eventSelection.ToolTip = "can't be empty";
+                return;
+            }
+            else if(numOfPeopleBox.Text == "" || !int.TryParse(numOfPeopleBox.Text, out numOfPeople))
+            {
+                numOfPeopleBox.Foreground = Brushes.Red;
+                return;
+            }
+            else if(decorReqBox.Text == "" || (decorReqBox.Text.ToLower() != "y" && decorReqBox.Text.ToLower() != "n"))
+            {
+                decorReqBox.Foreground = Brushes.Red;
+                return;
+            }
+            else if(CCBox.Text == "" || !CreditCardRule.CheckCC(CCBox.Text, out error))
+            {
+                
+                return;
+            }
+            else
+            {
+                eventDay = daySelection.SelectedValue.ToString();
+                var query = from currEv in eventPlan where currEv.EventDay == eventDay select currEv;
+                if(query.Count<Event>() > 0)
+                {
+                    return;
+                }
+                eventType = eventSelection.SelectedValue.ToString();
+                //numOfPeople = int.Parse(numOfPeopleBox.Text);
+                decorReq = decorReqBox.Text == "y" ? true : false;
+
+                creditCard = CCBox.Text;
+
+                switch (eventType.ToLower())
+                {
+
+                    case "birthday":
+                        if(CakeBox.Text == "")
+                        {
+                            CakeBox.Foreground = Brushes.Red;
+                            return;
+                        }
+                        string addFea = CakeBox.Text == "y" ? "Cake Required" : "Cake Not Required";
+                        currentEvent = new Birthday(eventDay, eventType, numOfPeople, decorReq, creditCard, addFea);
+                        break;
+
+                    case "graduation":
+                        if(DJBox.Text == "")
+                        {
+                            return;
+                        }
+                        bool djReq = DJBox.Text == "y" ? true : false;
+                        addFea = DJBox.Text == "y" ? "DJ Required" : "DJ Not Required";
+                        currentEvent = new Graduation(eventDay, eventType, numOfPeople, decorReq, creditCard, addFea);
+                        break;
+
+                    case "wedding":
+                        if(flowerBox.Text == "")
+                        {
+                            return;
+                        }
+                        bool flowersReq = flowerBox.Text == "y" ? true : false;
+                        addFea = flowerBox.Text == "y" ? "Flowers Required" : "Flowers Not Required";
+                        currentEvent = new Wedding(eventDay, eventType, numOfPeople, decorReq, creditCard, addFea);
+
+                        break;
+
+                }
+                EventList.Add(currentEvent);
+                eventPlan.Add(currentEvent);
+                int slot = returnKey(daySelection.SelectedValue.ToString(), datetable);
+                datetable.Remove(slot);
+                SaveEventListInXML();
+                ResetForm();
+                ResetForeground();
+                eventGrid.ItemsSource = eventPlan;
+                ResetToolTip();
+            }
+
+        }
+        public void ResetForeground()
+        {
+            daySelection.Foreground = Brushes.Black;
+            eventSelection.Foreground = Brushes.Black;
+            numOfPeopleBox.Foreground = Brushes.Black;
+            decorReqBox.Foreground = Brushes.Black;
+        }
+
+        public void ResetToolTip()
+        {
+            daySelection.ToolTip = "";
+            eventSelection.ToolTip = "";
         }
 
         private void ResetForm()
@@ -248,6 +317,7 @@ namespace EventManagement
 
         private void DisplayButton_Click(object sender, RoutedEventArgs e)
         {
+            ResetForm();
             eventPlan.Clear();
             EventList.Clear();
             eventPlan = ReadFromXML();
@@ -304,6 +374,14 @@ namespace EventManagement
         {
             string day = dayBox.Text.ToLower();
             string month = monthBox.Text.ToLower();
+            if (day == string.Empty)
+            {
+                return;
+            }
+            else if (month == string.Empty)
+            {
+                return;
+            }
             EventPlan plan = ReadFromXML();
             var query = from currEvent in plan
                         where currEvent.EventDay.ToLower().Contains(month) && currEvent.EventDay.ToLower().Contains(day)
@@ -322,7 +400,7 @@ namespace EventManagement
                 eventSelection.SelectedIndex = 0;
                 numOfPeopleBox.Text = ev.NumOfPeople.ToString();
                 decorReqBox.Text = ev.DecorReq ? "y" : "n";
-                CCBox.Text = ev.CreditCard;
+                CCBox.Text = ev.showHiddenCC();
 
                 if(ev.EventType.ToLower() == "birthday")
                 {
@@ -359,8 +437,16 @@ namespace EventManagement
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
+
             string day = dayBox.Text.ToLower();
             string month = monthBox.Text.ToLower();
+            if(day == string.Empty)
+            {
+                return;
+            }else if(month == string.Empty)
+            {
+                return;
+            }
             eventPlan = ReadFromXML();
             var query = from currEvent in eventPlan
                         where currEvent.EventDay.ToLower().Contains(month) && currEvent.EventDay.ToLower().Contains(day)
@@ -399,19 +485,36 @@ namespace EventManagement
             }
             eventGrid.ItemsSource = typeEv;
             SaveEventListInXML();
+            ResetForm();
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             string day = dayBox.Text.ToLower();
             string month = monthBox.Text.ToLower();
+            if (day == string.Empty)
+            {
+                return;
+            }
+            else if (month == string.Empty)
+            {
+                return;
+            }
             eventPlan = ReadFromXML();
-            foreach(Event currEv in eventPlan)
+            int slot = -1;
+            Hashtable dupliDateTable = GetDateTable();
+            foreach (Event currEv in eventPlan)
             {
                 if (currEv.EventDay.ToLower().Contains(month) && currEv.EventDay.ToLower().Contains(day))
                 {
                     eventPlan.Remove(currEv);
                     currEv.Dispose();
+                    slot = returnKey(currEv.EventDay, dupliDateTable);
+                    if (!datetable.ContainsKey(slot))
+                    {
+                        datetable.Add(slot, currEv.EventDay);
+                    }
+                    
                     break;
                 }
             }
@@ -419,6 +522,9 @@ namespace EventManagement
             eventPlan = ReadFromXML();
             eventGrid.ItemsSource = eventPlan;
             ResetForm();
+            
+            
+          
 
         }
     }

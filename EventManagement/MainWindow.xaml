@@ -102,7 +102,15 @@
         </TextBox>
 
         <Label x:Name="CCLabel" Content="Credit Card" Grid.Column="0" HorizontalAlignment="Left"  Grid.Row="7" VerticalAlignment="Top" Height="26" Margin="10,12,0,0" Width="190"/>
-        <TextBox x:Name="CCBox" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Width="120" Style="{StaticResource textBoxMargin}" Height="18" />
+        <TextBox x:Name="CCBox" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Width="120" Style="{StaticResource textBoxMargin}" Height="18"  ToolTip="{Binding ElementName=CCBox, Path=(Validation.Errors)[0].ErrorContent}">
+            <TextBox.Text>
+                <Binding Path="MyEv.CreditCard">
+                    <Binding.ValidationRules>
+                        <local:CreditCardRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
         <DataGrid Grid.Column="3" Grid.Row="1" Grid.RowSpan="7" Grid.ColumnSpan="2" x:Name="eventGrid"  AutoGenerateColumns="False" ItemsSource="{Binding Path=EventList}" Margin="0,1,-107,242">
             <DataGrid.Columns>
@@ -111,7 +119,8 @@
                 <DataGridTextColumn Header="Number Of people" Binding="{Binding NumOfPeople}"/>
                 <DataGridTextColumn Header="Decoration Required?" Binding="{Binding DecorReq}"/>
                 <DataGridTextColumn Header="Additional Feature" Binding="{Binding AdditionalFeature}"/>
-                <DataGridTextColumn Header="Credit Card" Binding="{Binding CreditCard}"/>
+                <DataGridTextColumn Header="Credit Card" Binding="{Binding HiddenCC}"/>
+                <DataGridTextColumn Header="Total Cost" Binding="{Binding ShowTotal}"/>
             </DataGrid.Columns>
         </DataGrid>
         <Grid Grid.Row="7" VerticalAlignment="Center" Margin="0,30,0,0" Grid.Column="3">
@@ -133,7 +142,15 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0" Content="Enter day" HorizontalAlignment="Right"></Label>
-            <TextBox Grid.Column="1" Grid.Row="0" x:Name="dayBox" Width="145" Margin="0,0,0,0" VerticalAlignment="Center" ></TextBox>
+            <TextBox Grid.Column="1" Grid.Row="0" x:Name="dayBox" Width="145" Margin="0,0,0,0" VerticalAlignment="Center" ToolTip="{Binding ElementName=dayBox, Path=(Validation.Errors)[0].ErrorContent}" >
+                <TextBox.Text>
+                    <Binding Path="MyEv.EventDay">
+                        <Binding.ValidationRules>
+                            <local:NumberRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             
             <Label Grid.Column="0" Grid.Row="1" Content="Enter Month" HorizontalAlignment="Right"></Label>
             <TextBox Grid.Column="1" Grid.Row="1" x:Name="monthBox" Width="145" Margin="0,0,0,0" VerticalAlignment="Center" ></TextBox>
