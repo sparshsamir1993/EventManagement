@@ -299,5 +299,127 @@ namespace EventManagement
             }
             eventGrid.ItemsSource = typeEv;
         }
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string day = dayBox.Text.ToLower();
+            string month = monthBox.Text.ToLower();
+            EventPlan plan = ReadFromXML();
+            var query = from currEvent in plan
+                        where currEvent.EventDay.ToLower().Contains(month) && currEvent.EventDay.ToLower().Contains(day)
+                        select currEvent;
+            EventPlan typeEv = new EventPlan();
+            foreach (Event ev in query)
+            {
+                typeEv.Add(ev);
+
+                //daySelection.SelectedIndex = GetComboBoxIndex(day, month);
+                daySelection.Items.Clear();
+                daySelection.Items.Add(ev.EventDay);
+                daySelection.SelectedIndex = 0;
+                eventSelection.Items.Clear();
+                eventSelection.Items.Add(ev.EventType);
+                eventSelection.SelectedIndex = 0;
+                numOfPeopleBox.Text = ev.NumOfPeople.ToString();
+                decorReqBox.Text = ev.DecorReq ? "y" : "n";
+                CCBox.Text = ev.CreditCard;
+
+                if(ev.EventType.ToLower() == "birthday")
+                {
+                    CakeBox.Visibility = Visibility.Visible;
+                    CakeBox.Text = ev.AdditionalFeature.ToLower().Contains("not") ? "n" : "y";
+                }
+                else if(ev.EventType.ToLower() == "graduation")
+                {
+                    DJBox.Visibility = Visibility.Visible;
+                    DJBox.Text = ev.AdditionalFeature.ToLower().Contains("not") ? "n" : "y";
+                }
+                else if(ev.EventType.ToLower() == "wedding")
+                {
+                    flowerBox.Visibility = Visibility.Visible;
+                    flowerBox.Text = ev.AdditionalFeature.ToLower().Contains("not") ? "n" : "y";
+                }
+            }
+            eventGrid.ItemsSource = typeEv;
+            
+        }
+
+        private int GetComboBoxIndex( string day, string month)
+        {
+            int key = -1;
+            foreach (DictionaryEntry pair in datetable)
+            {
+                if(pair.Value.ToString().ToLower().Contains(day) && pair.Value.ToString().ToLower().Contains(month))
+                {
+                    key = 14 - (int)pair.Key;
+                }
+            }
+            return key;
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            string day = dayBox.Text.ToLower();
+            string month = monthBox.Text.ToLower();
+            eventPlan = ReadFromXML();
+            var query = from currEvent in eventPlan
+                        where currEvent.EventDay.ToLower().Contains(month) && currEvent.EventDay.ToLower().Contains(day)
+                        select currEvent;
+            EventPlan typeEv = new EventPlan();
+            int numOfPpl = 0;
+            if(!int.TryParse(numOfPeopleBox.Text.ToString(), out numOfPpl))
+            {
+                return ;
+            }
+            foreach(Event currEv in eventPlan)
+            {
+                
+                if(currEv.EventDay.ToLower().Contains(month) && currEv.EventDay.ToLower().Contains(day))
+                {
+                    currEv.NumOfPeople = numOfPpl;
+                    currEv.DecorReq = decorReqBox.Text.ToLower() == "y" ? true : false;
+                    if (currEv.EventType.ToLower() == "birthday")
+                    {
+                        currEv.AdditionalFeature = CakeBox.Text.ToLower() == "y" ? "Cake Required" : "Cake Not Required";
+                    }
+                    else if (currEv.EventType.ToLower() == "graduation")
+                    {
+                        currEv.AdditionalFeature = DJBox.Text.ToLower() == "y" ? "DJ Required" : "DJ Not Required";
+                    }
+                    else if (currEv.EventType.ToLower() == "wedding")
+                    {
+                        currEv.AdditionalFeature = flowerBox.Text.ToLower() == "y" ? "Flowers Required" : "Flowers Not Required";
+                    }
+                    currEv.CreditCard = CCBox.Text;
+                    typeEv.Add(currEv);
+                }
+               
+
+
+            }
+            eventGrid.ItemsSource = typeEv;
+            SaveEventListInXML();
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            string day = dayBox.Text.ToLower();
+            string month = monthBox.Text.ToLower();
+            eventPlan = ReadFromXML();
+            foreach(Event currEv in eventPlan)
+            {
+                if (currEv.EventDay.ToLower().Contains(month) && currEv.EventDay.ToLower().Contains(day))
+                {
+                    eventPlan.Remove(currEv);
+                    currEv.Dispose();
+                    break;
+                }
+            }
+            SaveEventListInXML();
+            eventPlan = ReadFromXML();
+            eventGrid.ItemsSource = eventPlan;
+            ResetForm();
+
+        }
     }
 }

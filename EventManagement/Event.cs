@@ -2,7 +2,7 @@
 
 namespace EventManagement
 {
-    public abstract class Event : IComparable<Event>
+    public abstract class Event : IComparable<Event>, IDisposable
     {
         private string eventDay;
         private string eventType;
@@ -28,5 +28,9 @@ namespace EventManagement
             return 0;
         }
 
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
     }
 }

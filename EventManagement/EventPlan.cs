@@ -23,6 +23,10 @@ namespace EventManagement
         {
             eventList.Add(e);
         }
+        public void Remove(Event o)
+        {
+            eventList.Remove(o);
+        }
         public int Count
         {
             get => eventList.Count;
