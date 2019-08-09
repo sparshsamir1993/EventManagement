@@ -56,7 +56,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="EventPlan.cs" />
+    <Compile Include="MyEvent.cs" />
+    <Compile Include="NumberRule.cs" />
     <Compile Include="Wedding.cs" />
+    <Compile Include="ynRule.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

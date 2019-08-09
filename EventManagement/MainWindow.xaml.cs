@@ -36,6 +36,8 @@ namespace EventManagement
         public ObservableCollection<Event> EventList { get => eventList; set => eventList = value; }
         Hashtable  datetable = GetDateTable();
         EventPlan eventPlan = new EventPlan();
+        MyEvent myEv = new MyEvent();
+        public MyEvent MyEv { get => myEv; set => myEv = value; } 
         private static Hashtable GetDateTable()
         {
             Hashtable dateTable = new Hashtable();
@@ -160,14 +162,15 @@ namespace EventManagement
             Event currentEvent = null;
             string eventDay = string.Empty;
             string eventType = string.Empty;
-            int numOfPeople = 0;
-            bool decorReq = false;
+            int numOfPeople ;
+            bool decorReq;
             string creditCard = string.Empty;
 
             eventDay = daySelection.SelectedValue.ToString();
             eventType = eventSelection.SelectedValue.ToString();
             numOfPeople = int.Parse(numOfPeopleBox.Text);
             decorReq = decorReqBox.Text == "y" ? true : false;
+            
             creditCard = CCBox.Text;
 
             switch (eventType.ToLower())
