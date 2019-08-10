@@ -13,8 +13,8 @@ namespace EventManagement
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             string error = string.Empty;
-           
-            if(value.ToString() == string.Empty || value == null)
+            
+            if(value == null || value == string.Empty)
             {
                 return new ValidationResult(false, "Cannot be Empty");
             }

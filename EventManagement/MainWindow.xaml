@@ -60,6 +60,7 @@
                 <Binding Path="MyEv.NumOfPeople" >
                     <Binding.ValidationRules>
                         <local:NumberRule/>
+                        <local:EmptyCheck/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
@@ -71,6 +72,7 @@
                 <Binding Path="MyEv" >
                     <Binding.ValidationRules>
                         <local:ynRule/>
+                        <local:EmptyCheck/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
@@ -82,6 +84,7 @@
                 <Binding Path="MyEv.AdditionalFeature">
                     <Binding.ValidationRules>
                         <local:ynRule/>
+                        <local:EmptyCheck/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
@@ -93,6 +96,7 @@
                 <Binding Path="MyEv.AdditionalFeature">
                     <Binding.ValidationRules>
                         <local:ynRule/>
+                        <local:EmptyCheck/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
@@ -104,6 +108,7 @@
                 <Binding Path="MyEv.AdditionalFeature">
                     <Binding.ValidationRules>
                         <local:ynRule/>
+                        <local:EmptyCheck/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
@@ -115,6 +120,7 @@
                 <Binding Path="MyEv.CreditCard">
                     <Binding.ValidationRules>
                         <local:CreditCardRule/>
+                        <local:EmptyCheck/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
@@ -155,13 +161,22 @@
                     <Binding Path="MyEv.EventDay">
                         <Binding.ValidationRules>
                             <local:NumberRule/>
+                            <local:EmptyCheck/>
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
             </TextBox>
             
-            <Label Grid.Column="0" Grid.Row="1" Content="Enter Month" HorizontalAlignment="Right"></Label>
-            <TextBox Grid.Column="1" Grid.Row="1" x:Name="monthBox" Width="145" Margin="0,0,0,0" VerticalAlignment="Center" ></TextBox>
+            <Label Grid.Column="0" Grid.Row="1" Content="Enter Month Name" HorizontalAlignment="Right"></Label>
+            <TextBox Grid.Column="1" Grid.Row="1" x:Name="monthBox" Width="145" Margin="0,0,0,0" VerticalAlignment="Center" ToolTip="{Binding ElementName=monthBox, Path=(Validation.Errors)[0].ErrorContent}" >
+                <TextBox.Text>
+                    <Binding Path="MyEv.Month">
+                        <Binding.ValidationRules>
+                            <local:EmptyCheck/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
 
             <Button x:Name="searchButton" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Content="Search" Grid.Row="2" Grid.Column="1" Click="SearchButton_Click" ></Button>
             <Button x:Name="deleteButton" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Content="Delete" Grid.Row="3" Grid.Column="1" Click="DeleteButton_Click" ></Button>

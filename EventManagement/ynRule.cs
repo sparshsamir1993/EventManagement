@@ -13,7 +13,7 @@ namespace EventManagement
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             
-            if (value.ToString().ToLower() != "y" && value.ToString().ToLower() != "n")
+            if (value != null && value.ToString().ToLower() != "y" && value.ToString().ToLower() != "n")
             {
                 return new ValidationResult(false, "Please enter y/n.");
             }

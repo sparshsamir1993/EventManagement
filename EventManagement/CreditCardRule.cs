@@ -13,7 +13,7 @@ namespace EventManagement
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             string error = string.Empty;
-            if (!CheckCC(value.ToString(), out error))
+            if (value != null && !CheckCC(value.ToString(), out error))
             {
                 return new ValidationResult(false, error);
             }

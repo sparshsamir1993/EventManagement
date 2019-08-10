@@ -164,6 +164,7 @@ namespace EventManagement
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             ResetForeground();
+            ForceFormValidation();
             Event currentEvent = null;
             string eventDay = string.Empty;
             string eventType = string.Empty;
@@ -185,12 +186,12 @@ namespace EventManagement
             }
             else if(numOfPeopleBox.Text == "" || !int.TryParse(numOfPeopleBox.Text, out numOfPeople) || numOfPeople < 1)
             {
-                numOfPeopleBox.Foreground = Brushes.Red;
+                
                 return;
             }
             else if(decorReqBox.Text == "" || (decorReqBox.Text.ToLower() != "y" && decorReqBox.Text.ToLower() != "n"))
             {
-                decorReqBox.Foreground = Brushes.Red;
+                
                 return;
             }
             else if(CCBox.Text == "" || !CreditCardRule.CheckCC(CCBox.Text, out error))
@@ -369,13 +370,29 @@ namespace EventManagement
             }
             eventGrid.ItemsSource = typeEv;
         }
+        public void ForceValidation()
+        {
+            dayBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            monthBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        }
 
+        public void ForceFormValidation()
+        {
+            numOfPeopleBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            decorReqBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            flowerBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            DJBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            CakeBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            CCBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        }
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             string day = dayBox.Text.ToLower();
             string month = monthBox.Text.ToLower();
+            ForceValidation();
             if (day == string.Empty)
             {
+                
                 return;
             }
             else if (month == string.Empty)
@@ -400,7 +417,7 @@ namespace EventManagement
                 eventSelection.SelectedIndex = 0;
                 numOfPeopleBox.Text = ev.NumOfPeople.ToString();
                 decorReqBox.Text = ev.DecorReq ? "y" : "n";
-                CCBox.Text = ev.showHiddenCC();
+                CCBox.Text = ev.CreditCard;
 
                 if(ev.EventType.ToLower() == "birthday")
                 {
@@ -437,7 +454,8 @@ namespace EventManagement
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-
+            ForceValidation();
+            ForceFormValidation();
             string day = dayBox.Text.ToLower();
             string month = monthBox.Text.ToLower();
             if(day == string.Empty)
@@ -453,9 +471,14 @@ namespace EventManagement
                         select currEvent;
             EventPlan typeEv = new EventPlan();
             int numOfPpl = 0;
+            string ccstring = "";
             if(!int.TryParse(numOfPeopleBox.Text.ToString(), out numOfPpl))
             {
                 return ;
+            }
+            else if(!CreditCardRule.CheckCC(CCBox.Text, out ccstring))
+            {
+                return;
             }
             foreach(Event currEv in eventPlan)
             {
@@ -490,6 +513,7 @@ namespace EventManagement
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            ForceValidation();
             string day = dayBox.Text.ToLower();
             string month = monthBox.Text.ToLower();
             if (day == string.Empty)

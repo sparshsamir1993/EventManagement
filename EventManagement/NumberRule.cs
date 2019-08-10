@@ -13,15 +13,15 @@ namespace EventManagement
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             int num ;
-            if (!int.TryParse(value.ToString(), out num))
+            if (value != null && !int.TryParse(value.ToString(), out num))
             {
                 return new ValidationResult(false, "A number should be entered.");
             }
-            else if(int.TryParse(value.ToString(), out num) && num > 500)
+            else if(value != null && int.TryParse(value.ToString(), out num) && num > 500)
             {
                 return new ValidationResult(false, "People should not be more than 500");
             }
-            else if((int.TryParse(value.ToString(), out num) && num < 1))
+            else if(value != null && int.TryParse(value.ToString(), out num) && num < 1)
             {
                 return new ValidationResult(false, "People cant be less than 1");
             }
