@@ -21,6 +21,10 @@ namespace EventManagement
             {
                 return new ValidationResult(false, "People should not be more than 500");
             }
+            else if((int.TryParse(value.ToString(), out num) && num < 1))
+            {
+                return new ValidationResult(false, "People cant be less than 1");
+            }
 
 
 

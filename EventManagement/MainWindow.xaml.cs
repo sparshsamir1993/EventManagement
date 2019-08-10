@@ -183,7 +183,7 @@ namespace EventManagement
                 eventSelection.ToolTip = "can't be empty";
                 return;
             }
-            else if(numOfPeopleBox.Text == "" || !int.TryParse(numOfPeopleBox.Text, out numOfPeople))
+            else if(numOfPeopleBox.Text == "" || !int.TryParse(numOfPeopleBox.Text, out numOfPeople) || numOfPeople < 1)
             {
                 numOfPeopleBox.Foreground = Brushes.Red;
                 return;
@@ -254,7 +254,7 @@ namespace EventManagement
                 SaveEventListInXML();
                 ResetForm();
                 ResetForeground();
-                eventGrid.ItemsSource = eventPlan;
+                eventGrid.ItemsSource = EventList;
                 ResetToolTip();
             }
 
